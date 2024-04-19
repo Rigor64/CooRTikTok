@@ -6,7 +6,7 @@
 #-----------------------------------------------------------------------------------------------------------------------------------------------
 
 # Caricamento delle librerie
-
+remotes::install_github("JBGruber/traktok")
 library(CooRTweet)
 library(igraph)
 library(traktok)
@@ -21,8 +21,6 @@ set.seed(123)
 if (is.na(Sys.getenv("OPENAI_API_KEY")) ) {
   stop("Environment variables for OpenAI API not set. Please set OPENAI_API_KEY.")
 }
-
-
 
 #Leggo il CSV e verifico se sono presenti eventuali errori
 tryCatch({
@@ -56,6 +54,7 @@ tiktok_graph <- CooRTweet::generate_coordinated_network(x = result,
                                                        edge_weight = 0.5, # default 0.5
                                                        objects = TRUE,)
 
+tiktok_graph
 #Estraggo per ciascun componente della rete la lista degli object usati
 
 # Convertiamo il grafo in due dataframe: uno per gli edge e l'altro per i vertici
@@ -84,18 +83,18 @@ if (labels & Sys.getenv("OPENAI_API_KEY") != "") {
 
   for (j in 1:n_components) {
 
-    cluster_accounts <- subset(tiktok_df,
-                               tiktok_df$component == 1)
-    cluster_accounts <- arrange(cluster_accounts, avg_time_delta)
+    component_edges <- subset(tiktok_df,tiktok_df$component == j)
+    component_edges <- arrange(component_edges, weight)
 
-    n <- ifelse(nrow(cluster_accounts) / 100 * 20 > 5,
-                round(nrow(cluster_accounts) / 100 * 20, 0), 5)
 
-    cluster_accounts <- dplyr::slice_head(.data = cluster_accounts, n = n)
-    #cluster_accounts$comtxt <- paste(cluster_accounts$object_ids, ifelse(cluster_accounts$object_ids != "NA", cluster_accounts$object_ids, ""))
+    n <- ifelse(nrow(component_edges) / 100 * 20 > 5,
+                round(nrow(component_edges) / 100 * 20, 0), 5)
+
+    component_edges <- dplyr::slice_head(.data = component_edges, n = n)
 
     #compongo la lista di tutte le descrizioni dei video associate a quel component
-    text <- paste(trimws(cluster_accounts$object_ids), collapse = "\n")
+    text <- paste(trimws(component_edges$object_ids), collapse = "\n")
+
     text
 
     #scrivo il messaggio da inviare a chatgpt
