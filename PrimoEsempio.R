@@ -11,8 +11,8 @@ result <- detect_groups(russian_coord_tweets,
                         min_participation = 2,
                         time_window = 600)
 
-#account_id = account che ha posta il contenutio per primo
-#account_id_y = account che ha posta il contenutio per ultimo
+#account_id = account che ha posta il contenuto per primo
+#account_id_y = account che ha posta il contenuto per ultimo
 
 combined_accounts <- c(result$account_id, result$account_id_y)
 combined_accounts_dt <- data.table::data.table(account_id = combined_accounts)
@@ -44,6 +44,16 @@ coord_graph_fast <-
     edge_weight = 0.99,
     subgraph = 2
   )
+
+#creazione di un dataset passando i parametri, funzione customizzabile per la preparazione del dataframe
+prep_data <-
+  function(x,
+           object_id = NULL,
+           account_id = NULL,
+           content_id = NULL,
+           timestamp_share = NULL
+  )
+
 
 
 
