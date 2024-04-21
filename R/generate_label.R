@@ -4,6 +4,8 @@
 generate_label <- function(graph,
                            model = "gpt-3.5-turbo") {
 
+  #graph = tiktok_graph
+
 
   graph_edge_df <- igraph::as_data_frame(graph, what = "edges")
   graph_vertices_df <- igraph::as_data_frame(graph, what = "vertices")
@@ -30,11 +32,12 @@ generate_label <- function(graph,
 
     for (j in 1:n_components) {
 
+      #j=2
       component_edges <- subset(graph_df,graph_df$component == j)
       component_edges <- arrange(component_edges, weight)
 
-      component_edges <- subset(graph_df,graph_df$component == 1)
-      component_edges <- arrange(component_edges, weight)
+      #component_edges <- subset(graph_df,graph_df$component == 1)
+      #component_edges <- arrange(component_edges, weight)
 
 
       n <- ifelse(nrow(component_edges) / 100 * 20 > 5,

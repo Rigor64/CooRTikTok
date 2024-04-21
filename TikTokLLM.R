@@ -17,14 +17,14 @@ source("./R/generate_label.R")
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------
 
-set.seed(123)
+#set.seed(123)
 
 # Verifico che  ci siano le variabili d'ambiente
 if (is.na(Sys.getenv("OPENAI_API_KEY")) ) {
   stop("Environment variables for OpenAI API not set. Please set OPENAI_API_KEY.")
 }
 
-Sys.getenv("OPENAI_API_KEY")
+#Sys.getenv("OPENAI_API_KEY")
 
 
 #Leggo il CSV e verifico se sono presenti eventuali errori
@@ -36,7 +36,7 @@ tryCatch({
   stop("Failed to read TikTok coordinated accounts ID CSV. Error: ", e$message)
 })
 
-View(tiktok_database)
+#View(tiktok_database)
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -65,7 +65,7 @@ component_df <- components(tiktok_graph)
 # Aggiungi il parametro di componente al grafo
 V(tiktok_graph)$component <- component_df$membership
 
-tiktok_graph
+#tiktok_graph
 
 #generiamo le label a partire dalla descrizione dei video
 tiktok_df <- generate_label(tiktok_graph)
