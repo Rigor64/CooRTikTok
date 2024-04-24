@@ -1,11 +1,11 @@
-# Definizione funzione detect_cluster() 
-# Attraverso la scelta di un algoritmo di community detection, 
+# Definizione funzione detect_cluster()
+# Attraverso la scelta di un algoritmo di community detection,
 # permette il rilevamento di cluster
 detect_cluster <- function(graph, mode) {
 	if (is_connected(graph)) {
 		clusters <- switch(
 			mode,
-			1 = cluster_edge_betweenness(
+			1 <- cluster_edge_betweenness(
 			  graph,
 			  weights = NULL,
 			  directed = TRUE,
@@ -15,20 +15,20 @@ detect_cluster <- function(graph, mode) {
 			  modularity = TRUE,
 			  membership = TRUE
 			),
-			2 = cluster_fast_greedy(
+			2 <- cluster_fast_greedy(
 			  graph,
 			  merges = TRUE,
 			  modularity = TRUE,
 			  membership = TRUE,
 			  weights = NULL
 			),
-			3 = cluster_label_prop(
-				graph, 
-				weights = NULL, 
-				initial = NULL, 
+			3 <- cluster_label_prop(
+				graph,
+				weights = NULL,
+				initial = NULL,
 				fixed = NULL
 			),
-			4 = cluster_leading_eigen(
+			4 <- cluster_leading_eigen(
 			  graph,
 			  steps = -1,
 			  weights = NULL,
@@ -38,7 +38,7 @@ detect_cluster <- function(graph, mode) {
 			  extra = NULL,
 			  env = parent.frame()
 			),
-			5 = cluster_leiden(
+			5 <- cluster_leiden(
 			  graph,
 			  objective_function = c("CPM", "modularity"),
 			  weights = NULL,
@@ -48,9 +48,9 @@ detect_cluster <- function(graph, mode) {
 			  n_iterations = 2,
 			  vertex_weights = NULL
 			),
-			6 = cluster_louvain(
-				graph, 
-				weights = NULL, 
+			6 <- cluster_louvain(
+				graph,
+				weights = NULL,
 				resolution = 1
 			)
 		)
@@ -74,4 +74,7 @@ detect_cluster <- function(graph, mode) {
 		# Genero messaggio di errore
 		stop("Invalid input.\n")
 	}
+
+  return (clusters)
+
 }

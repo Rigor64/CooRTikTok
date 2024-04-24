@@ -1,20 +1,12 @@
 
 
 
-generate_label <- function(graph,
-                           model = "gpt-3.5-turbo") {
+generate_label <- function(dataframe, model = "gpt-3.5-turbo") {
 
-  #graph = tiktok_graph
+  dataframe <- summary_entity
 
-
-  graph_edge_df <- igraph::as_data_frame(graph, what = "edges")
-  graph_vertices_df <- igraph::as_data_frame(graph, what = "vertices")
-
-  #Creo un dataframe unico in cui aggiungo il component corrispondente ad ogni account coinvolto
-  graph_df <- merge(graph_edge_df, graph_vertices_df, by.x = "from", by.y = "name")
-
-  #salvo il numero di component, trovando quello con l'identificativo più alto
-  n_components <- length(unique(graph_df$component))
+  #salvo il numero di component
+  n_components <- length(unique(dataframe$component))
 
   #-----------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -28,27 +20,26 @@ generate_label <- function(graph,
 
     cat("\nAuto-labelling clusters with OpenAI gpt-3.5-turbo (https://platform.openai.com/)...\n")
 
+    #inizializzo la progressbar
     pb <- utils::txtProgressBar(min = 0, max = n_components, width = 100, style = 3)
 
     for (j in 1:n_components) {
 
-      #j=2
-      component_edges <- subset(graph_df,graph_df$component == j)
-      component_edges <- arrange(component_edges, weight)
+      j=2
 
-      #component_edges <- subset(graph_df,graph_df$component == 1)
-      #component_edges <- arrange(component_edges, weight)
+      #seleziona il j-esimo component
+      component_edges <- subset(dataframe,dataframe$component == j)
 
-
+      #calcolo il numero massimo di descrizioni da prendere
       n <- ifelse(nrow(component_edges) / 100 * 20 > 5,
                   round(nrow(component_edges) / 100 * 20, 0), 5)
 
-      component_edges <- dplyr::slice_head(.data = component_edges, n = n)
+      cropped_text <- lapply(component_edges$video_descriptions, function(desc) head(desc, n))
 
       #compongo la lista di tutte le descrizioni dei video associate a quel component
-      text <- paste(trimws(component_edges$object_ids), collapse = "\n")
+      text <- unlist(cropped_text)
 
-      text
+      #text
 
       #scrivo il messaggio da inviare a chatgpt
       msg <- list(list("role" = "system",
@@ -58,6 +49,8 @@ generate_label <- function(graph,
                                          text,
                                          "\n\n",
                                          "English label:")))
+
+      unlist(msg)
 
       #richiamiamo la versione di chatgtp da utilizzare e passo il messaggio
       res <- tryCatch(
@@ -83,8 +76,8 @@ generate_label <- function(graph,
     }
 
     #aggiungo al dataframe che abbiamo tutte le descrizioni dei component che abbiamo
-    graph_df <- merge(graph_df, temp_df, by.x = "component", by.y = "cluster_id")
+    dataframe <- merge(dataframe, temp_df, by.x = "component", by.y = "cluster_id")
   }
 
-  return(graph_df)
+  return(dataframe)
 }
