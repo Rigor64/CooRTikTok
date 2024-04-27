@@ -8,8 +8,8 @@
 #https://developers.tiktok.com/doc/research-api-specs-query-user-info/
 
 #Creazione di una tabella con le informazioni sugli account coordinati, restituite dall'API di tiktok
-#Gestione della funzione generate_label per la chiamata alle API di chatGPT
-#Risoluzione dei problemi
+#FATTO - Gestione della funzione generate_label per la chiamata alle API di chatGPT
+#Risoluzione dei problemi (?)
 #Utilizzare lo stesso naming di CoorNet
 #gestire la questione di cluster e component
 
@@ -26,6 +26,7 @@ library(dplyr)
 source("./R/generate_label.R")
 source("./R/create_entity.R")
 source("./R/detect_cluster.R")
+source("./R/tiktok_account_info.R")
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -80,6 +81,14 @@ graph <- CooRTweet::generate_coordinated_network(x = result,
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------
 
+#creazione di un dataframe con i soli account che hanno presentato un compontamento coordinato
+summary_accounts <- account_stats(graph, result, weight_threshold = "none")
+
+#aggiunta delle informazioni sull'account, utilizzando le API di TikTok
+summary_accounts <- tiktok_account_info(summary_accounts)
+
+#-----------------------------------------------------------------------------------------------------------------------------------------------
+
 #dataframe che somma tutte le informazzioni che abbiamo riguardo i component di account coordinati e le relative descrizioni dei video
 summary_entity <- create_entity(graph = graph, database = database)
 
@@ -87,5 +96,7 @@ summary_entity <- create_entity(graph = graph, database = database)
 tiktok_df <- generate_label(summary_entity)
 
 tiktok_df
+
+
 
 

@@ -25,8 +25,6 @@ generate_label <- function(dataframe, model = "gpt-3.5-turbo") {
 
     for (j in 1:n_components) {
 
-      j=2
-
       #seleziona il j-esimo component
       component_edges <- subset(dataframe,dataframe$component == j)
 
@@ -37,20 +35,14 @@ generate_label <- function(dataframe, model = "gpt-3.5-turbo") {
       cropped_text <- lapply(component_edges$video_descriptions, function(desc) head(desc, n))
 
       #compongo la lista di tutte le descrizioni dei video associate a quel component
-      text <- unlist(cropped_text)
-
-      #text
+      #text <- unlist(cropped_text)
 
       #scrivo il messaggio da inviare a chatgpt
       msg <- list(list("role" = "system",
-                       "content" = "You are a researcher investigating coordinated and inauthentic behavior on TikTok. Your objective is to generate concise, descriptive labels in English that capture the shared video description of clusters of TikTok.\n\n"),
+                       "content" = "You are a researcher investigating coordinated and inauthentic behavior on TikTok. Your objective is to generate only one concise, descriptive label in English that capture the shared video description of clusters of TikTok.\n\n"),
                   list("role" = "user",
-                       "content" = paste("I will supply a list of video descriptions for each cluster. Identify the shared features among these descriptions:\n\n",
-                                         text,
-                                         "\n\n",
-                                         "English label:")))
-
-      unlist(msg)
+                       "content" = "I will supply a list of video descriptions for each cluster. Identify the shared features among these descriptions and descrive them in one label:\n\n"),
+                  cropped_text)
 
       #richiamiamo la versione di chatgtp da utilizzare e passo il messaggio
       res <- tryCatch(
@@ -69,9 +61,10 @@ generate_label <- function(dataframe, model = "gpt-3.5-turbo") {
       if (!is.null(res)) {
         temp_df <- rbind(temp_df, data.frame(cluster_id = j, label = res$choices$message.content))
         # print(paste(j, "-", res$choices$message.content))
+      }else{
+        temp_df <- rbind(temp_df, data.frame(cluster_id = j, label = "System error"))
       }
       utils::setTxtProgressBar(pb, pb$getVal() + 1)
-      text <- NULL
       Sys.sleep(0.5)
     }
 
