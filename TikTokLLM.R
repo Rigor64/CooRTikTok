@@ -11,7 +11,7 @@
 #FATTO - Gestione della funzione generate_label per la chiamata alle API di chatGPT
 #Risoluzione dei problemi (?)
 #Utilizzare lo stesso naming di CoorNet
-#gestire la questione di cluster e component
+# FATTO - gestire la questione di cluster e component
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -90,7 +90,9 @@ summary_accounts <- tiktok_account_info(summary_accounts)
 #-----------------------------------------------------------------------------------------------------------------------------------------------
 
 #dataframe che somma tutte le informazzioni che abbiamo riguardo i component di account coordinati e le relative descrizioni dei video
-summary_entity <- create_entity(graph = graph, database = database)
+# Type == TRUE è component
+# Type == FALSE è cluster
+summary_entity <- create_entity(graph = graph, database = database, type = FALSE)
 
 #generiamo le label a partire dalla descrizione dei video
 tiktok_df <- generate_label(summary_entity)
