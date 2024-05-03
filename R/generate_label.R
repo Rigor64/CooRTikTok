@@ -1,9 +1,25 @@
 
 
 
-generate_label <- function(dataframe, model = "gpt-3.5-turbo") {
+generate_label <- function(dataframe, model = "gpt-3.5-turbo", get_cluster = TRUE) {
 
-  dataframe <- summary_entity
+  dataframe <- coordinated_account_stat %>%
+    dplyr::group_by(component) %>%
+    dplyr::reframe(
+      num_account = n(),
+      avg.views = mean(view_count),
+      avg.comments = mean(comment_count),
+      avg.shares = mean(share_count),
+      avg.likes = mean(like_count),
+      most_frequent_region = names(sort(table(region_code), decreasing = TRUE))[1],
+      video_descriptions = list(names(sort(table(video_description), decreasing = TRUE)))
+    )
+
+  if(get_cluster == TRUE) {
+
+    dataframe <- coordinated_account_stat %>%
+      dplyr::group_by(cluster)
+  }
 
   #salvo il numero di component
   n_components <- length(unique(dataframe$component))

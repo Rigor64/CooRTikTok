@@ -1,27 +1,23 @@
 
-create_entity <- function(graph, database, type = TRUE) {
+create_entity <- function(graph, database, get_cluster = TRUE) {
 
   source("./R/detect_cluster.R")
 
+  # Individuazione dei componenti
+  data <- components(graph)$membership
 
-	if (type == TRUE) {
+  # Aggiunta del parametro componente al grafo
+  V(graph)$component <- data
 
-		# Individuazione dei componenti
-		data <- components(graph)$membership
+	if (get_cluster == TRUE) {
 
-		# Aggiunta del parametro componente al grafo
-		V(graph)$component <- data
+	  # Aggiunta del parametro componente al grafo
+	  V(graph)$cluster <- cluster_louvain(
+	    graph,
+	    weights = NULL,
+	    resolution = 1
+	  )$membership
 
-	} else if (type == FALSE) {
-		# Individuazione dei claster
-	  weights <- E(graph)$weight
-		data <- detect_cluster(graph)
-
-		# Aggiunta del parametro componente al grafo
-		V(graph)$cluster <- data$membership
-		graph
-	} else {
-			stop("Invalid input.\n")
 	}
 
   graph_vertices_df <- igraph::as_data_frame(graph, what = "vertices")
@@ -48,34 +44,6 @@ create_entity <- function(graph, database, type = TRUE) {
 
   coordinated_account_stat <- merge(coordinated_account_stat, graph_vertices_df, by.x ="account_id", by.y  = "name")
 
-  if(type == TRUE) {
-    summary_entity <- coordinated_account_stat %>%
-      dplyr::group_by(component) %>%
-      dplyr::reframe(
-        num_account = n(),
-        avg.views = mean(view_count),
-        avg.comments = mean(comment_count),
-        avg.shares = mean(share_count),
-        avg.likes = mean(like_count),
-        most_frequent_region = names(sort(table(region_code), decreasing = TRUE))[1],
-        video_descriptions = list(names(sort(table(video_description), decreasing = TRUE)))
-      )
-  } else {
-    summary_entity <- coordinated_account_stat %>%
-      dplyr::group_by(cluster) %>%
-      dplyr::reframe(
-        num_account = n(),
-        avg.views = mean(view_count),
-        avg.comments = mean(comment_count),
-        avg.shares = mean(share_count),
-        avg.likes = mean(like_count),
-        most_frequent_region = names(sort(table(region_code), decreasing = TRUE))[1],
-        video_descriptions = list(names(sort(table(video_description), decreasing = TRUE)))
-      )
-  }
 
-
-
-
-	return(summary_entity)
+	return(coordinated_account_stat)
 }

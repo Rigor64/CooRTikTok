@@ -30,17 +30,6 @@ source("./R/tiktok_account_info.R")
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------
 
-#set.seed(123)
-
-# Verifico che  ci siano le variabili d'ambiente
-if (is.na(Sys.getenv("OPENAI_API_KEY")) ) {
-  stop("Environment variables for OpenAI API not set. Please set OPENAI_API_KEY.")
-}
-
-#Sys.getenv("OPENAI_API_KEY")
-
-#-----------------------------------------------------------------------------------------------------------------------------------------------
-
 #Leggo il CSV e verifico se sono presenti eventuali errori
 tryCatch({
   database <- readr::read_csv("./data/tiktok_database.csv",
@@ -81,21 +70,19 @@ graph <- CooRTweet::generate_coordinated_network(x = result,
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------
 
+#dataframe che somma tutte le informazzioni che abbiamo riguardo i component di account coordinati e le relative descrizioni dei video
+summary_entity <- create_entity(graph = graph, database = database, get_cluster = TRUE)
+
 #creazione di un dataframe con i soli account che hanno presentato un compontamento coordinato
 summary_accounts <- account_stats(graph, result, weight_threshold = "none")
 
 #aggiunta delle informazioni sull'account, utilizzando le API di TikTok
-summary_accounts <- tiktok_account_info(summary_accounts)
+summary_accounts <- tiktok_account_info(summary_accounts, summary_entity)
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------
 
-#dataframe che somma tutte le informazzioni che abbiamo riguardo i component di account coordinati e le relative descrizioni dei video
-# Type == TRUE è component
-# Type == FALSE è cluster
-summary_entity <- create_entity(graph = graph, database = database, type = FALSE)
-
 #generiamo le label a partire dalla descrizione dei video
-tiktok_df <- generate_label(summary_entity)
+tiktok_df <- generate_label(summary_entity, get_cluster = TRUE)
 
 tiktok_df
 
