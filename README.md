@@ -8,8 +8,8 @@ Nel progetto descritto di seguito si è cercato di migliorare l’efficacia di `
 2. Una chiave ("*key*") API di ChatGPT (modello gpt-3.5-turbo) per la generazione delle *labels*[^1]
 3. Una chiave ("*key*") API di TikTok per ricavere informazioni ulteriori sugli account[^2]
 
-[^1] Inserire la chiave nel file .Renviron con dicitura 'OPENAI_API_KEY = '
-[^2] Inserire la chiave nel file .Renviron con dicitura 'TIKTOK_CLIENT_KEY = ' e  'TIKTOK_CLIENT_SECRET = '
+[^1]: Inserire la chiave nel file .Renviron con dicitura 'OPENAI_API_KEY = '
+[^2]: Inserire la chiave nel file .Renviron con dicitura 'TIKTOK_CLIENT_KEY = ' e  'TIKTOK_CLIENT_SECRET = '
 
 # Quick Start
 
