@@ -3,16 +3,6 @@
 #Uso di un LLM per l'identificazione dei diversi network coinvolti e che cosa hanno in comune
 #Visualizzazione dei risultati tramite un grafo
 
-
-#API tiktok per la restituzioine delle informazioni sull'account
-#https://developers.tiktok.com/doc/research-api-specs-query-user-info/
-
-#Creazione di una tabella con le informazioni sugli account coordinati, restituite dall'API di tiktok
-#FATTO - Gestione della funzione generate_label per la chiamata alle API di chatGPT
-#Risoluzione dei problemi (?)
-#Utilizzare lo stesso naming di CoorNet
-# FATTO - gestire la questione di cluster e component
-
 #-----------------------------------------------------------------------------------------------------------------------------------------------
 
 # Caricamento delle librerie
@@ -25,7 +15,6 @@ library(dplyr)
 
 source("./R/generate_label.R")
 source("./R/create_entity.R")
-source("./R/detect_cluster.R")
 source("./R/tiktok_account_info.R")
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------
