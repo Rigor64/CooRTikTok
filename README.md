@@ -1,4 +1,4 @@
-# CooRTikTok
+# CooRTok
 *[RuudGaled](https://github.com/RuudGaled), [Rigor64](https://github.com/Rigor64)*
 
 CoorTok utilizza la liberia `CoorTweet` fornendo funzionalità specifiche per l'analisi delle reti coordinate su TikTok. 
