@@ -4,7 +4,7 @@
 CoorTok utilizza la liberia `CoorTweet` fornendo funzionalità specifiche per l'analisi delle reti coordinate su TikTok. 
 
 # Requisiti
-1. File `.csv` contenente informazioni realtive a TikTok. Nello specifico questo database contiene il risultato di una specifica query che restituisce una lista di video condivisi sul social cinese con i relativi dettagli sull'utente che ha condiviso il video, la descrizione e altre dati collegati.
+1. File `.csv` contenente informazioni relative a TikTok. Tramite la libreria [traktok](https://github.com/JBGruber/traktok) è possibile ricavare il database utile per l'analisi dei dati relativi a i dettagli sull'utente che ha condiviso il video, la descrizione e altre dati collegati. 
 2. Una chiave ("*key*") API di ChatGPT (modello gpt-3.5-turbo) per la generazione delle *labels*[^1]
 3. Una chiave ("*key*") API di TikTok per ricavere informazioni ulteriori sugli account[^2]
 
