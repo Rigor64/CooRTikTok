@@ -1,7 +1,7 @@
 # CooRTikTok
 *[RuudGaled](https://github.com/RuudGaled), [Rigor64](https://github.com/Rigor64)*
 
-Nel progetto descritto di seguito si è cercato di migliorare l’efficacia di `CoorTweet` aggiungendo funzionalità specifiche per l’analisi dei dati provenienti dal social TikTok. 
+CoorTok utilizza la liberia `CoorTweet` fornendo funzionalità specifiche per l'analisi delle reti coordinate su TikTok. 
 
 # Requisiti
 1. File `.csv` contenente informazioni realtive a TikTok. Nello specifico questo database contiene il risultato di una specifica query che restituisce una lista di video condivisi sul social cinese con i relativi dettagli sull'utente che ha condiviso il video, la descrizione e altre dati collegati.
